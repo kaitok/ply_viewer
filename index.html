@@ -19,10 +19,17 @@
     <script src="js/PLYLoader.js"></script>
     <script src="js/OrbitControls.js"></script>
     <script>
-    window.addEventListener( "DOMContentLoaded", init);  
-    window.addEventListener('resize', onResize, false);
-    var renderer, camera, group;
+
+    var renderer, camera, group, rotationId;
+    var isRotate = true;
+
+    window.addEventListener("DOMContentLoaded", init);
+    window.addEventListener("resize", onResize, false);
+    window.addEventListener("click", onClick, false);
+
     function init() {
+
+      // renderer
       const width = window.innerWidth;
       const height = window.innerHeight;
       renderer = new THREE.WebGLRenderer({
@@ -31,41 +38,53 @@
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(width, height);
 
-      const scene = new THREE.Scene();
+      // camera
       var fov = 90 // 視野角：0～90
       var aspect = canvas.clientWidth / canvas.clientHeight; // 縦横比
       var near = 1; // 視体積手前までの距離
       var far = 100; // 視体積奥までの距離
       camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
       camera.position.set(0, 0, 14);
-
+      
+      // controls
       var controls = new THREE.OrbitControls( camera, renderer.domElement );
-      update();
-
       const plyLoader = new THREE.PLYLoader();
       const plyMaterial = new THREE.PointsMaterial({
         color: 0x00ff00,
         size: 0.05
       });
-
+      
+      // scene
+      const scene = new THREE.Scene();
       plyLoader.load('./data/sample.ply', (geometry) => {
         group = new THREE.Points(geometry, plyMaterial);
         group.sortParticles = true;
         scene.add(group);
         renderer.render( scene, camera );
+        rotation();
+        update();
       });
-
-      tick()
 
       function update() {
         renderer.render(scene, camera);
         requestAnimationFrame(update);
       }
+    }
 
-      function tick() {
-        requestAnimationFrame(tick);
-        group.rotation.y -= 0.0005;
+    function rotation() {
+      rotationId = requestAnimationFrame(rotation);
+      group.rotation.y -= 0.0005;
+    }
+
+    function onClick() {
+      if (isRotate) {
+        isRotate = false;
+        cancelAnimationFrame(rotationId);
+      } else {
+        isRotate = true;
+        requestAnimationFrame(rotation);
       }
+      
     }
 
     function onResize() {
