@@ -21,7 +21,7 @@
     <script>
     window.addEventListener( "DOMContentLoaded", init);  
     window.addEventListener('resize', onResize, false);
-    var renderer, camera;
+    var renderer, camera, group;
     function init() {
       const width = window.innerWidth;
       const height = window.innerHeight;
@@ -32,12 +32,12 @@
       renderer.setSize(width, height);
 
       const scene = new THREE.Scene();
-      var fov = 45; // 視野角：0～90
+      var fov = 90 // 視野角：0～90
       var aspect = canvas.clientWidth / canvas.clientHeight; // 縦横比
       var near = 1; // 視体積手前までの距離
-      var far = 1000; // 視体積奥までの距離
+      var far = 100; // 視体積奥までの距離
       camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
-      camera.position.set(0, 0, 12);
+      camera.position.set(0, 0, 14);
 
       var controls = new THREE.OrbitControls( camera, renderer.domElement );
       update();
@@ -55,9 +55,16 @@
         renderer.render( scene, camera );
       });
 
+      tick()
+
       function update() {
         renderer.render(scene, camera);
         requestAnimationFrame(update);
+      }
+
+      function tick() {
+        requestAnimationFrame(tick);
+        group.rotation.y -= 0.0005;
       }
     }
 
