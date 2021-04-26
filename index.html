@@ -6,6 +6,7 @@
     <style>
       body { 
         margin: 0;
+        height: 100%;
         background: #000;
       }
       .head {
@@ -13,33 +14,30 @@
         color: #fff;
         padding: 20px 0 0 10px;
       }
-      #canvas{
-        width: 800px;
-        height: 600px;
-      }
 		</style>
     <script src="js/three.js"></script>
     <script src="js/PLYLoader.js"></script>
     <script src="js/OrbitControls.js"></script>
     <script>
-    window.addEventListener( "DOMContentLoaded", function(){
-      const canvas = document.getElementById('canvas');
-
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize( canvas.clientWidth, canvas.clientHeight );
-      document.body.appendChild( renderer.domElement );
-
+    window.addEventListener( "DOMContentLoaded", init);  
+    window.addEventListener('resize', onResize, false);
+    var renderer, camera;
+    function init() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector("#canvas")
+      });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(width, height);
 
       const scene = new THREE.Scene();
       var fov = 45; // 視野角：0～90
       var aspect = canvas.clientWidth / canvas.clientHeight; // 縦横比
       var near = 1; // 視体積手前までの距離
       var far = 1000; // 視体積奥までの距離
-
-      var camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+      camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
       camera.position.set(0, 0, 12);
-
-
 
       var controls = new THREE.OrbitControls( camera, renderer.domElement );
       update();
@@ -61,7 +59,13 @@
         renderer.render(scene, camera);
         requestAnimationFrame(update);
       }
-    });
+    }
+
+    function onResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 		</script>
   </head>
   <body>
@@ -69,7 +73,7 @@
     <div class="head">
       Graphics
     </div>
-    <div id="canvas"></div>
+    <canvas id="canvas"></canvas>
 
   </body>
 </html>
