@@ -59,12 +59,14 @@
 
       // axes
       const axesHelper = new THREE.AxesHelper( 5 );
+      axesHelper.position.set(0, -1, 0);
       scene.add( axesHelper );
       
       // grid
       const size = 10;
       const divisions = 10;
       const gridHelper = new THREE.GridHelper( size, divisions );
+      gridHelper.position.set(0, -1, 0);
       scene.add( gridHelper );
 
       // import point clouds
