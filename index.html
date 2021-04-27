@@ -56,6 +56,18 @@
       
       // scene
       const scene = new THREE.Scene();
+
+      // axes
+      const axesHelper = new THREE.AxesHelper( 5 );
+      scene.add( axesHelper );
+      
+      // grid
+      const size = 10;
+      const divisions = 10;
+      const gridHelper = new THREE.GridHelper( size, divisions );
+      scene.add( gridHelper );
+
+      // import point clouds
       plyLoader.load('./data/sample.ply', (geometry) => {
         group = new THREE.Points(geometry, plyMaterial);
         group.sortParticles = true;
