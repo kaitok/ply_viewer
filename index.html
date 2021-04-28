@@ -22,6 +22,7 @@
     <script src="js/three.js"></script>
     <script src="js/PLYLoader.js"></script>
     <script src="js/OrbitControls.js"></script>
+    <script src="js/Stats.js"></script>
     <script>
 
     var renderer, camera, group, rotationId;
@@ -32,6 +33,10 @@
     window.addEventListener("click", onClick, false);
 
     function init() {
+
+      var stats = new Stats();
+      stats.showPanel( 1 );
+      document.body.appendChild( stats.dom );
 
       // renderer
       const width = window.innerWidth;
@@ -91,8 +96,10 @@
     }
 
     function rotation() {
+      stats.begin();
       rotationId = requestAnimationFrame(rotation);
       group.rotation.y -= 0.0005;
+      stats.end();
     }
 
     function onClick() {
