@@ -14,6 +14,10 @@
         color: #fff;
         padding: 20px 0 0 10px;
       }
+      #count {
+        float: right;
+        padding-right: 20px;
+      }
 		</style>
     <script src="js/three.js"></script>
     <script src="js/PLYLoader.js"></script>
@@ -75,6 +79,7 @@
         group.sortParticles = true;
         scene.add(group);
         renderer.render( scene, camera );
+        document.getElementById('count').innerHTML = group.geometry.attributes.position.array.length + ' points';
         rotation();
         update();
       });
@@ -112,6 +117,7 @@
 
     <div class="head">
       Graphics
+      <div id="count"></div>
     </div>
     <canvas id="canvas"></canvas>
 
